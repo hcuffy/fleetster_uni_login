@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
-import './style.css';
-import Register from './register';
-import Login from './login';
-import Home from './home';
-import axios from 'axios';
+import React, { Component } from "react";
+import "./style.css";
+import Register from "./register";
+import Login from "./login";
+import Home from "./home";
+import axios from "axios";
 const url = "http://localhost:3030";
 
 export default class App extends Component {
   constructor(props) {
-      super(props);
-      this.state = {
-        disable: true,
-        login: false,
-        registering: true,
-        logged_in: false,
-        email: '',
-        password: ''
-      };
+    super(props);
+    this.state = {
+      disable: true,
+      login: false,
+      registering: true,
+      logged_in: false,
+      email: "",
+      password: ""
+    };
 
     this.entryChange = this.entryChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -24,41 +24,34 @@ export default class App extends Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.loggedIn = this.loggedIn.bind(this);
     this.loggedOut = this.loggedOut.bind(this);
-    this.handleLogout = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
-
   entryChange() {
-    let {
-      login,
-      registering
-    } = this.state;
+    let { login, registering } = this.state;
 
     registering = registering === true ? false : true;
 
     login = login === true ? false : true;
 
     this.setState({
-      registering, login
+      registering,
+      login
     });
   }
 
   handleChange(event) {
-    let {
-      email,
-      password,
-      disable
-    } = this.state;
+    let { email, password, disable } = this.state;
 
     const name = event.target.name;
-    email = name === 'email' ? event.target.value : this.state.email;
-    password = name === 'password' ? event.target.value : this.state.password;
+    email = name === "email" ? event.target.value : this.state.email;
+    password = name === "password" ? event.target.value : this.state.password;
 
-    let emailRegx = new RegExp (/(.+)@(.+){2,}\.(.+){2,}/);
-    let passRegx = new RegExp(/^[A-Z0-9_-]{6,}$/);
-    if(emailRegx.test(email) && passRegx.test(password)){
-        disable = false;
-      }
+    let emailRegx = /(.+)@(.+){2,}\.(.+){2,}/;
+    let passRegx = /[a-zA-Z0-9_-]{6,}$/;
+    if (emailRegx.test(email) && passRegx.test(password)) {
+      disable = false;
+    }
 
     this.setState({
       email,
@@ -68,36 +61,35 @@ export default class App extends Component {
   }
 
   handleSubmit() {
-    const {email,password} = this.state;
+    const { email, password } = this.state;
 
     let formData = {
-      'username': email,
-      'password': password
-    }
-      axios({
-          method: 'post',
-          url: url + '/users/signup',
-          contentType: 'application/json',
-          data: formData,
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          crossDomain: true,
-      }).then(function (res) {
-              console.log(res);
-          }).catch(function (err) {
-                console.log(err);
-              });
+      username: email,
+      password: password
+    };
+    axios({
+      method: "post",
+      url: url + "/users/signup",
+      contentType: "application/json",
+      data: formData,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      crossDomain: true
+    })
+      .then(function(res) {
+        console.log(res);
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
   }
 
   loggedIn() {
-    let {
-      login,
-      registering,
-      logged_in
-    } = this.state;
+    let { login, registering, logged_in } = this.state;
 
     login = false;
-    registering =  false;
+    registering = false;
     logged_in = true;
 
     this.setState({
@@ -105,42 +97,40 @@ export default class App extends Component {
       registering,
       logged_in
     });
-
   }
 
   handleLogin() {
-    const {email,password} = this.state;
+    const { email, password } = this.state;
 
     let formData = {
-      'username': email,
-      'password': password
-    }
+      username: email,
+      password: password
+    };
 
     axios({
-        method: 'post',
-        url: url + '/users/signin',
-        contentType: 'application/json',
-        data: formData,
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        crossDomain: true,
-    }).then(function (res) {
-          console.log(res)
-        }).catch(function (err) {
-              console.log(err);
-          });
-        this.loggedIn();
+      method: "post",
+      url: url + "/users/signin",
+      contentType: "application/json",
+      data: formData,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      crossDomain: true
+    })
+      .then(function(res) {
+        console.log(res);
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+    this.loggedIn();
   }
 
   loggedOut() {
-    let {
-      login,
-      registering,
-      logged_in
-    } = this.state;
+    let { login, registering, logged_in } = this.state;
 
     login = true;
-    registering =  false;
+    registering = false;
     logged_in = false;
 
     this.setState({
@@ -148,48 +138,46 @@ export default class App extends Component {
       registering,
       logged_in
     });
-
   }
 
   handleLogout() {
-
-    axios.get(url + '/users/logout')
-      .then(function (res) {
+    axios
+      .get(url + "/users/logout")
+      .then(function(res) {
         console.log(res);
       })
-      .catch(function (err) {
+      .catch(function(err) {
         console.log(err);
       });
     this.loggedOut();
   }
 
   render() {
+    return (
+      <div>
+        <h1 className="my-header"> Carsharing</h1>
+        {this.state.logged_in && (
+          <Home userInfo={this.state.email} handleLogout={this.handleLogout} />
+        )}
 
-      return ( <div>
-        <h1 className = "my-header" > Carsharing
-        </h1>
-         {this.state.logged_in && <Home
-              userInfo={this.state.email}
-              handleLogout = {this.handleLogout}
-          />}
-
-         {this.state.registering && <Register
-             entryChange={this.entryChange}
-             handleChange = {this.handleChange}
-             handleSubmit = {this.handleSubmit}
-             email={this.state.email}
-             password={this.state.password}
-             disable={this.state.disable}
-
-          />}
-         {this.state.login && <Login
-           entryChange={this.entryChange}
-           handleLogin = {this.handleLogin}
-           handleChange = {this.handleChange}
-          />}
-
-        </div>
-      );
+        {this.state.registering && (
+          <Register
+            entryChange={this.entryChange}
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
+            email={this.state.email}
+            password={this.state.password}
+            disable={this.state.disable}
+          />
+        )}
+        {this.state.login && (
+          <Login
+            entryChange={this.entryChange}
+            handleLogin={this.handleLogin}
+            handleChange={this.handleChange}
+          />
+        )}
+      </div>
+    );
   }
-
 }
